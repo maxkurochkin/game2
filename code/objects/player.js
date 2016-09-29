@@ -68,7 +68,7 @@ var PlayerClass = function(x, y) {
         if ((moveX == 0) && (moveY == 1)) { return DIRECTIONS.bottom; }
     };
     var getMovePoint = function() {
-        return findPath(
+        return finder.getPathPoint(
             position.x,
             position.y,
             targetPosition.x,
@@ -134,7 +134,9 @@ var PlayerClass = function(x, y) {
             return { x: position.x, y: position.y };
         },
         setTarget: function(x, y) {
-            var point = findNearestPoint(x, y, game.size.x, game.size.y, game.pathMap);
+            var point = finder.getNearestPoint(
+                position.x, position.y, x, y, game.size.x, game.size.y, game.pathMap
+            );
             if (point !== null) {
                 targetPosition.x = point.x;
                 targetPosition.y = point.y;

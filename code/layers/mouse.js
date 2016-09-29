@@ -7,7 +7,7 @@ var MouseLayerClass = function(element) {
         var coordinates = game.screenToMap(event.offsetX, event.offsetY);
         if (((coordinates.x >= 0) && (coordinates.x < game.size.x))
        	&& ((coordinates.y >= 0) && (coordinates.y < game.size.y))) {
-        	game.layers.active.player.setTarget(coordinates.x, coordinates.y);
+        	game.player.setTarget(coordinates.x, coordinates.y);
         }
     });
 

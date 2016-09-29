@@ -66,9 +66,10 @@ var AggressiveClass = function(x, y) {
         if ((moveX == 1) && (moveY == 0)) { return DIRECTIONS.right; }
         if ((moveX == 0) && (moveY == -1)) { return DIRECTIONS.top; }
         if ((moveX == 0) && (moveY == 1)) { return DIRECTIONS.bottom; }
+        return DIRECTIONS.bottom;
     };
     var getMovePoint = function() {
-        return findPath(
+        return finder.getPathPoint(
             position.x,
             position.y,
             targetPosition.x,
@@ -104,8 +105,8 @@ var AggressiveClass = function(x, y) {
     };
     var startMove = function() {
         var movePoint = getMovePoint();
+        setDirectionByMovePoint(movePoint.x, movePoint.y);
         if ((movePoint.x != 0) || (movePoint.y != 0)) {
-            setDirectionByMovePoint(movePoint.x, movePoint.y);
             if (game.pathMap[position.y + movePoint.y][position.x + movePoint.x]) {
                 position.x += movePoint.x;
                 position.y += movePoint.y;
@@ -117,7 +118,9 @@ var AggressiveClass = function(x, y) {
         }
     };
     var setTarget = function(x, y) {
-        var point = findNearestPoint(x, y, game.size.x, game.size.y, game.pathMap);
+        var point = finder.getNearestPoint(
+            position.x, position.y, x, y, game.size.x, game.size.y, game.pathMap
+        );
         if (point !== null) {
             targetPosition.x = point.x;
             targetPosition.y = point.y;
@@ -131,13 +134,15 @@ var AggressiveClass = function(x, y) {
             if (currentAction == ACTIONS.move) { animateMove(); }
             else if (currentAction == ACTIONS.attack) { animateAttack(); }
             else {
-                var playerPosition = game.layers.active.player.getPosition();
+                var playerPosition = game.player.getPosition();
                 setTarget(playerPosition.x, playerPosition.y);
-                if ((position.x != targetPosition.x)
-                || (position.y != targetPosition.y)) {
-                    if (getPointsDistance(position.x, position.y, playerPosition.x, playerPosition.y) > 1) {
-                        startMove();
-                    }
+                if (((position.x != targetPosition.x) || (position.y != targetPosition.y))
+                && (finder.getDistance(position.x, position.y, playerPosition.x, playerPosition.y) > 1)) {
+                    startMove();
+                }
+                else {
+                    var point = finder.getDirection(position.x, position.y, playerPosition.x, playerPosition.y);
+                    setDirectionByMovePoint(point.x, point.y);
                 }
             }
         },

@@ -8,11 +8,10 @@ var ActiveLayerClass = function(container) {
         }, 60);
     }
     var object = {
-        player: null,
         container: container,
         setMap: function(map) {
-            object.player = PlayerClass(5, 5, 'test');
-            activeObjects.push(object.player);
+            game.player = PlayerClass(5, 2, 'test');
+            activeObjects.push(game.player);
             activeObjects.push(AggressiveClass(9, 9, 'test'));
             runAnimationFrame();
         }

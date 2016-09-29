@@ -1,6 +1,7 @@
 var game = {
     container: null,
     pathMap: null,
+    player: null,
     size: {
         x: 0,
         y: 0
